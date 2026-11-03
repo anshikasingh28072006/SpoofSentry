@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/email-shield-logo.svg" />
+    <title>SpoofSentry — Email Spoofing & Threat Analysis</title>
+    <meta name="description" content="Email spoofing detection tool analyzing SPF, DKIM, DMARC DNS authentication, social-engineering red flags, and send-time patterns." />
+    <meta property="og:title" content="SpoofSentry — Email Spoofing & Threat Analysis" />
+    <meta property="og:description" content="Email spoofing detection tool analyzing SPF, DKIM, DMARC DNS authentication, social-engineering red flags, and send-time patterns." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        // Intercept third-party browser extension errors (e.g. MetaMask, Ethereum providers, content scripts)
+        function isExtensionError(err, msg, filename) {
+          var str = (msg || '') + ' ' + (err && err.message ? err.message : '') + ' ' + (err && err.stack ? err.stack : '') + ' ' + (filename || '');
+          var lower = str.toLowerCase();
+          return (
+            lower.includes('metamask') ||
+            lower.includes('failed to connect to metamask') ||
+            lower.includes('ethereum') ||
+            lower.includes('chrome-extension://') ||
+            lower.includes('moz-extension://') ||
+            lower.includes('safari-extension://')
+          );
+        }
+
+        window.addEventListener('error', function(event) {
+          if (isExtensionError(event.error, event.message, event.filename)) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event.reason;
+          var msg = (typeof reason === 'string') ? reason : (reason && reason.message) ? reason.message : '';
+          if (isExtensionError(reason, msg, '')) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+
+        var origConsoleError = console.error;
+        console.error = function() {
+          var args = Array.prototype.slice.call(arguments);
+          var joined = args.map(function(a) {
+            return (a && a.message) ? a.message : (a && a.stack) ? a.stack : String(a);
+          }).join(' ');
+          if (isExtensionError(null, joined, '')) {
+            return;
+          }
+          origConsoleError.apply(console, args);
+        };
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600;1,6..72,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body class="bg-[#faf7f2] text-[#1c1917] antialiased selection:bg-[#059669] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

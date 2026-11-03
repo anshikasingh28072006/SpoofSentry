@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SpoofSentry — Email Spoofing & Threat Detection{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="analyst-theme">
+    <header class="top-nav">
+        <div class="nav-brand">
+            <span class="terminal-symbol">⬢</span>
+            <span class="brand-title">SPOOF<span class="brand-accent">SENTRY</span></span>
+            <span class="badge-sub">THREAT-ENGINE v1.4</span>
+        </div>
+        <div class="nav-status">
+            {% if session.get('username') %}
+            <span class="status-indicator live"></span>
+            <span class="user-meta"><strong>{{ session.get('username') }}</strong> @ {{ session.get('company_name', 'Analyst Unit') }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">LOGOUT</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="nav-link">LOGIN</a>
+            <a href="{{ url_for('register') }}" class="nav-link highlight">REGISTER</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="main-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-alert flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="system-footer">
+        <div class="footer-left">
+            <span>SPOOFSENTRY // RULE-BASED AUTHENTICATION & SOCIAL ENGINEERING TRIAGE</span>
+        </div>
+        <div class="footer-right">
+            <span>DNS RESOLVER: LIVE TXT QUERIES ACTIVE</span>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

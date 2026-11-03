@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Register Operator — SpoofSentry{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-badge">NEW OPERATOR</span>
+            <h2>Register Workspace</h2>
+            <p>Initialize a secure local workspace for SPF/DKIM/DMARC forensics.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+            <div class="form-group">
+                <label for="company_name">Organization / Lab / Institution Name</label>
+                <input type="text" id="company_name" name="company_name" required placeholder="e.g. CyberSec Defense Labs" autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Operator Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username" placeholder="e.g. jdoe_sec">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password (Minimum 6 characters)</label>
+                <input type="password" id="password" name="password" minlength="6" required autocomplete="new-password" placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary full-width">CREATE ANALYST ACCOUNT</button>
+        </form>
+
+        <div class="auth-footer">
+            <span>Already have credentials?</span>
+            <a href="{{ url_for('login') }}">Log in to console</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

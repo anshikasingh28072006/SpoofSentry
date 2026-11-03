@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block title %}SpoofSentry — Email Threat & Spoofing Inspector{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <!-- Left Column: Input Form & Test Scenarios -->
+    <section class="panel input-panel">
+        <div class="panel-header">
+            <div class="panel-title-wrap">
+                <span class="panel-icon">⚙</span>
+                <h2>MESSAGE INTAKE</h2>
+            </div>
+            <div class="quick-samples">
+                <span class="samples-label">SAMPLES:</span>
+                <button type="button" class="btn-sample" id="btn-sample-legit" title="Load Google legitimate authentication example">
+                    [+] LEGIT SAMPLE
+                </button>
+                <button type="button" class="btn-sample alert" id="btn-sample-spoofed" title="Load Spoofed CEO Wire Transfer phishing example">
+                    [!] SPOOFED SAMPLE
+                </button>
+            </div>
+        </div>
+
+        <!-- Mode Tabs -->
+        <div class="tab-bar">
+            <button type="button" class="tab-btn active" id="tab-btn-headers" data-tab="headers-tab">
+                HEADER & CONTENT FIELDS
+            </button>
+            <button type="button" class="tab-btn" id="tab-btn-eml" data-tab="eml-tab">
+                UPLOAD .EML FILE
+            </button>
+        </div>
+
+        <!-- Tab 1: Headers & Body Form -->
+        <div class="tab-content active" id="headers-tab">
+            <form id="analyze-form" class="analyst-form">
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="from_address">
+                            From Header Address <span class="req">*</span>
+                            <span class="field-hint">(Display name + sender address)</span>
+                        </label>
+                        <input type="text" id="from_address" name="from_address" required 
+                            placeholder='e.g. "Google Support" <support@google.com>'>
+                    </div>
+                    <div class="form-group">
+                        <label for="return_path">
+                            Return-Path (Envelope Sender)
+                            <span class="field-hint">(Mismatches signal spoofing)</span>
+                        </label>
+                        <input type="text" id="return_path" name="return_path" 
+                            placeholder='e.g. <bounce-handler@google.com>'>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dkim_header">
+                        DKIM-Signature Header
+                        <span class="field-hint">(Evaluates d= and s= DNS public key)</span>
+                    </label>
+                    <input type="text" id="dkim_header" name="dkim_header" class="font-mono text-sm"
+                        placeholder="v=1; a=rsa-sha256; d=google.com; s=20230601; ...">
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="date_header">
+                            Date Header
+                            <span class="field-hint">(Off-hours check: 23:00 - 06:00)</span>
+                        </label>
+                        <input type="text" id="date_header" name="date_header" 
+                            placeholder="Mon, 31 Aug 2026 14:30:00 +0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">
+                            Subject Line
+                            <span class="field-hint">(Scanned for urgency & threat triggers)</span>
+                        </label>
+                        <input type="text" id="subject" name="subject" 
+                            placeholder="Security review for your account">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="body">
+                        Message Body (Plain Text)
+                        <span class="field-hint">(Analyzed for social engineering red flags & raw-IP links)</span>
+                    </label>
+                    <textarea id="body" name="body" rows="6" placeholder="Paste the message content here..."></textarea>
+                </div>
+
+                <div class="action-bar">
+                    <button type="submit" class="btn-submit" id="btn-submit-analyze">
+                        <span class="btn-symbol">▶</span> EXECUTE SPOOF DETECTION
+                    </button>
+                    <button type="button" class="btn-clear" id="btn-clear-form">CLEAR</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tab 2: Upload .EML File -->
+        <div class="tab-content" id="eml-tab">
+            <div class="eml-dropzone" id="eml-dropzone">
+                <input type="file" id="eml-file-input" accept=".eml,.msg,.txt" class="hidden-file-input">
+                <div class="dropzone-content">
+                    <div class="dropzone-icon">📄</div>
+                    <div class="dropzone-prompt">
+                        <strong>DRAG & DROP .EML FILE HERE</strong>
+                        <span>or click to browse local filesystem</span>
+                    </div>
+                    <div class="dropzone-meta">Extracts MIME multipart headers, text payload & DKIM signatures automatically</div>
+                </div>
+            </div>
+            <div id="eml-file-info" class="file-info-badge hidden">
+                <span class="file-name" id="selected-file-name"></span>
+                <button type="button" class="btn-remove-file" id="btn-remove-file">✕</button>
+            </div>
+            <div class="action-bar" style="margin-top: 1rem;">
+                <button type="button" class="btn-submit" id="btn-submit-eml" disabled>
+                    <span class="btn-symbol">▶</span> PARSE & ANALYZE .EML FILE
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Right Column: Results & Security Triage -->
+    <section class="panel results-panel" id="results-section">
+        <div class="panel-header">
+            <div class="panel-title-wrap">
+                <span class="panel-icon">⚡</span>
+                <h2>SECURITY TRIAGE REPORT</h2>
+            </div>
+            <div class="report-status" id="report-timestamp-badge">
+                <span class="status-pill idle">AWAITING INPUT</span>
+            </div>
+        </div>
+
+        <!-- Placeholder when no result is loaded -->
+        <div class="empty-state" id="empty-state">
+            <div class="empty-terminal-graphic">
+                <div class="terminal-line"><span class="prompt">$</span> spoof-sentry --status</div>
+                <div class="terminal-line dim">Engine ready. Load a sample or input message headers to begin DNS validation & content analysis.</div>
+            </div>
+        </div>
+
+        <!-- Loading spinner state -->
+        <div class="loading-state hidden" id="loading-state">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+                <strong>RUNNING DNS TXT & CONTENT SCANS...</strong>
+                <span id="loading-step">Querying SPF, DKIM selector & DMARC records</span>
+            </div>
+        </div>
+
+        <!-- Full Results Card -->
+        <div class="results-content hidden" id="results-content">
+            <!-- 1. Verdict Stamp -->
+            <div class="verdict-banner" id="verdict-banner">
+                <div class="verdict-stamp-wrap">
+                    <span class="verdict-label">FINAL SECURITY VERDICT</span>
+                    <div class="verdict-stamp" id="verdict-text">LEGITIMATE</div>
+                </div>
+                <div class="verdict-summary" id="verdict-summary-text">
+                    All authentication records verified and content risk is within safe parameters.
+                </div>
+                <div class="escalation-alert hidden" id="escalation-alert">
+                    ⚠️ <strong>Escalation:</strong> Base verdict elevated due to HIGH social-engineering content risk.
+                </div>
+            </div>
+
+            <!-- 2. Sender Domain Alignment Matrix -->
+            <div class="result-block">
+                <div class="block-title">
+                    <span class="title-num">01</span>
+                    <h3>SENDER DOMAIN ALIGNMENT</h3>
+                </div>
+                <div class="alignment-grid">
+                    <div class="alignment-item">
+                        <span class="item-label">From Header Domain</span>
+                        <code class="item-val" id="res-from-domain">—</code>
+                    </div>
+                    <div class="alignment-item">
+                        <span class="item-label">Return-Path Domain</span>
+                        <code class="item-val" id="res-return-path-domain">—</code>
+                    </div>
+                    <div class="alignment-item">
+                        <span class="item-label">Domain Alignment</span>
+                        <span class="badge-status" id="res-alignment-status">ALIGNED</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Authentication Protocols (DNS Checks) -->
+            <div class="result-block">
+                <div class="block-title">
+                    <span class="title-num">02</span>
+                    <h3>DNS AUTHENTICATION (SPF / DKIM / DMARC)</h3>
+                </div>
+                <div class="auth-checks-grid">
+                    <!-- SPF -->
+                    <div class="auth-check-card" id="card-spf">
+                        <div class="check-top">
+                            <span class="check-name">SPF Record</span>
+                            <span class="status-tag" id="spf-status-tag">PASS</span>
+                        </div>
+                        <p class="check-detail" id="spf-detail-text">Valid SPF record active on domain.</p>
+                        <div class="dns-record-box">
+                            <span class="record-label">DNS TXT:</span>
+                            <code class="record-content" id="spf-raw-record">v=spf1 include:_spf.google.com ~all</code>
+                        </div>
+                    </div>
+
+                    <!-- DKIM -->
+                    <div class="auth-check-card" id="card-dkim">
+                        <div class="check-top">
+                            <span class="check-name">DKIM Signature & Key</span>
+                            <span class="status-tag" id="dkim-status-tag">PASS</span>
+                        </div>
+                        <p class="check-detail" id="dkim-detail-text">Public key record confirmed in DNS.</p>
+                        <div class="dns-record-box">
+                            <span class="record-label">Selector Lookup:</span>
+                            <code class="record-content" id="dkim-raw-record">20230601._domainkey.domain.com</code>
+                        </div>
+                    </div>
+
+                    <!-- DMARC -->
+                    <div class="auth-check-card" id="card-dmarc">
+                        <div class="check-top">
+                            <span class="check-name">DMARC Policy</span>
+                            <span class="status-tag" id="dmarc-status-tag">PASS</span>
+                        </div>
+                        <p class="check-detail" id="dmarc-detail-text">DMARC policy enforcement action active.</p>
+                        <div class="dns-record-box">
+                            <span class="record-label">Policy Action:</span>
+                            <code class="record-content" id="dmarc-raw-record">_dmarc.domain.com (p=reject)</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Content Risk & Social Engineering Signals -->
+            <div class="result-block">
+                <div class="block-title">
+                    <span class="title-num">03</span>
+                    <h3>CONTENT & SOCIAL ENGINEERING ANALYSIS</h3>
+                </div>
+                <div class="content-risk-dashboard">
+                    <div class="risk-gauge-box">
+                        <div class="score-display">
+                            <span class="score-num" id="content-risk-score">0</span>
+                            <span class="score-max">/100</span>
+                        </div>
+                        <span class="risk-badge-pill" id="content-risk-rating">LOW RISK</span>
+                    </div>
+
+                    <div class="signals-summary">
+                        <div class="signal-stat">
+                            <span class="stat-count" id="stat-urgency">0</span>
+                            <span class="stat-name">Urgency Triggers</span>
+                        </div>
+                        <div class="signal-stat">
+                            <span class="stat-count" id="stat-financial">0</span>
+                            <span class="stat-name">Financial Requests</span>
+                        </div>
+                        <div class="signal-stat">
+                            <span class="stat-count" id="stat-threat">0</span>
+                            <span class="stat-name">Threat / Scare</span>
+                        </div>
+                        <div class="signal-stat">
+                            <span class="stat-count" id="stat-links">0</span>
+                            <span class="stat-name">Extracted Links</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matched Phrases Pill Tags -->
+                <div class="matched-phrases-wrap" id="matched-phrases-wrap">
+                    <div class="phrases-header">DETECTED RED-FLAG PHRASES:</div>
+                    <div class="phrases-container" id="matched-phrases-container">
+                        <span class="no-phrases-text">No suspicious keywords or social-engineering signals detected.</span>
+                    </div>
+                </div>
+
+                <!-- Raw IP Alerts -->
+                <div class="raw-ip-alert hidden" id="raw-ip-alert">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-text"><strong>Raw IP Link Detected:</strong> Phishing emails often use direct IP addresses to evade domain reputation filters.</span>
+                    <code class="raw-ip-list" id="raw-ip-list"></code>
+                </div>
+            </div>
+
+            <!-- 5. Timing Anomaly Analysis -->
+            <div class="result-block">
+                <div class="block-title">
+                    <span class="title-num">04</span>
+                    <h3>SEND-TIME ANOMALY DETECTION</h3>
+                </div>
+                <div class="timing-box" id="timing-box">
+                    <div class="timing-badge" id="timing-badge">NORMAL HOURS</div>
+                    <div class="timing-detail" id="timing-detail-text">
+                        Sent during standard daytime window.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Decision Rationale -->
+            <div class="result-block">
+                <div class="block-title">
+                    <span class="title-num">05</span>
+                    <h3>ENGINE DECISION LOG</h3>
+                </div>
+                <ul class="reasons-list" id="reasons-list"></ul>
+            </div>
+
+            <!-- Academic Limitation Notice -->
+            <div class="limitation-card">
+                <span class="info-icon">ℹ</span>
+                <div class="limitation-text">
+                    <strong>Academic Scope & Security Implementation Notice:</strong>
+                    This engine validates domain SPF policy presence, DKIM selector DNS records, and DMARC enforcement. Full cryptographic RSA body verification and sending SMTP relay IP validation require mail server MTA integration.
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- History Log Drawer / Section -->
+<section class="panel history-panel">
+    <div class="panel-header">
+        <div class="panel-title-wrap">
+            <span class="panel-icon">📋</span>
+            <h2>ANALYSIS AUDIT HISTORY</h2>
+        </div>
+        <button type="button" class="btn-refresh-history" id="btn-refresh-history">↻ REFRESH LOG</button>
+    </div>
+    <div class="table-responsive">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>TIMESTAMP (UTC)</th>
+                    <th>SENDER ADDRESS</th>
+                    <th>SUBJECT</th>
+                    <th>RISK SCORE</th>
+                    <th>VERDICT</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="history-table-body">
+                <tr>
+                    <td colspan="7" class="empty-table">No previous analyses recorded for this session.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

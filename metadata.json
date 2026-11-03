@@ -1,0 +1,6 @@
+{
+  "name": "SpoofSentry",
+  "description": "Email spoofing detection tool analyzing SPF, DKIM, DMARC DNS authentication, social-engineering red flags, and send-time patterns.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
