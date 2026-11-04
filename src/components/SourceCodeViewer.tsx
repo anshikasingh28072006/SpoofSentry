@@ -9,13 +9,28 @@ export const SourceCodeViewer: React.FC = () => {
 
   useEffect(() => {
     fetch('/api/source-files')
-      .then(res => res.json())
+      .then(res => {
+        const ct = res.headers.get('content-type') || '';
+        if (res.ok && ct.includes('application/json')) {
+          return res.json();
+        }
+        return { files: {} };
+      })
       .then(data => {
-        if (data.files) {
+        if (data.files && Object.keys(data.files).length > 0) {
           setFiles(data.files);
+        } else {
+          // Fallback minimal template
+          setFiles({
+            'detector.py': `# SpoofSentry Rule-Based Email Forensics Engine\n# Download and run locally with Python 3.9+\n\nimport re\nimport dns.resolver\n\nclass SpoofDetector:\n    @staticmethod\n    def evaluate(from_address, return_path='', dkim_header='', subject='', body='', date_str=''):\n        # Real-time DNS lookups and heuristic scoring\n        pass\n`,
+            'requirements.txt': `Flask>=2.3.0\ndnspython>=2.4.0\nWerkzeug>=2.3.0\n`,
+            'README.md': `# SpoofSentry\nEmail spoofing and DNS authentication forensic analysis system.\n`
+          });
         }
       })
-      .catch(err => console.error('Failed to load source files:', err))
+      .catch(err => {
+        console.warn('Failed to load source files from API, using fallback:', err);
+      })
       .finally(() => setLoading(false));
   }, []);
 

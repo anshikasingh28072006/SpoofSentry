@@ -165,7 +165,8 @@ export const ScreenshotIntakeTab: React.FC<ScreenshotIntakeTabProps> = ({ onAnal
         body: formData
       });
 
-      if (response.ok) {
+      const ct = response.headers.get('content-type') || '';
+      if (response.ok && ct.includes('application/json')) {
         const resData = await response.json();
         if (resData.success && resData.data) {
           // Check if server or AI determined this is NOT an email

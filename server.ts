@@ -8,6 +8,7 @@ import { exec } from 'child_process';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type } from '@google/genai';
 import { validateEmailInput } from './src/utils/emailValidator';
+import { generateReportHtml, generateWordDocString } from './src/reportTemplate';
 
 const resolveTxtPromise = promisify(dns.resolveTxt);
 const execPromise = promisify(exec);
@@ -566,6 +567,44 @@ app.get('/terms', (req, res) => {
 </html>`);
 });
 
+// -------------------------------------------------------------
+// Academic B.Tech Project Report & Direct Document Download Endpoints
+// -------------------------------------------------------------
+app.get(['/report', '/documentation'], (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(generateReportHtml());
+});
+
+app.get(['/download-report-pdf', '/SpoofSentry_Mini_Project_Report.pdf', '/report.pdf'], (req, res) => {
+  const pdfPath = path.join(process.cwd(), 'public/SpoofSentry_Mini_Project_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.pdf"');
+    res.sendFile(pdfPath);
+  } else {
+    res.redirect('/');
+  }
+});
+
+app.get(['/download-report', '/api/download-report-pdf'], (req, res) => {
+  const pdfPath = path.join(process.cwd(), 'public/SpoofSentry_Mini_Project_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.pdf"');
+    res.sendFile(pdfPath);
+  } else {
+    res.setHeader('Content-Type', 'application/msword; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.doc"');
+    res.send(generateWordDocString());
+  }
+});
+
+app.get(['/download-report-docx', '/api/download-report-docx'], (req, res) => {
+  res.setHeader('Content-Type', 'application/msword; charset=utf-8');
+  res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.doc"');
+  res.send(generateWordDocString());
+});
+
 // OAuth and Environment Configuration
 app.get('/api/config', (req, res) => {
   let googleClientId = '';
@@ -807,7 +846,8 @@ app.post('/api/analyze', async (req, res) => {
       from,
       subject,
       body,
-      text: [from, subject, body].filter(Boolean).join('\n')
+      text: [from, subject, body].filter(Boolean).join('\n'),
+      source: source || 'manual'
     });
 
     if (!validation.isEmail) {
@@ -1020,6 +1060,56 @@ app.get('/api/source-files', (req, res) => {
     res.status(500).json({ error: 'Could not load source files.' });
   }
 });
+
+// Download endpoints for academic report
+app.get('/download-report', (req, res) => {
+  const pdfPath = path.join(process.cwd(), 'public', 'SpoofSentry_Mini_Project_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    return res.download(pdfPath, 'SpoofSentry_BTech_Mini_Project_Report.pdf');
+  }
+  const htmlPath = path.join(process.cwd(), 'public', 'report.html');
+  if (fs.existsSync(htmlPath)) {
+    return res.sendFile(htmlPath);
+  }
+  res.redirect('/');
+});
+
+app.get(['/download-report', '/SpoofSentry_Mini_Project_Report.pdf', '/SpoofSentry_BTech_Mini_Project_Report.pdf'], (req, res) => {
+  const pdfPath = path.join(process.cwd(), 'public', 'SpoofSentry_Mini_Project_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="SpoofSentry_BTech_Mini_Project_Report.pdf"');
+    fs.createReadStream(pdfPath).pipe(res);
+  } else {
+    res.redirect('/');
+  }
+});
+
+app.get('/api/report/pdf', (req, res) => {
+  const pdfPath = path.join(process.cwd(), 'public', 'SpoofSentry_Mini_Project_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.pdf"');
+    fs.createReadStream(pdfPath).pipe(res);
+  } else {
+    res.status(404).json({ error: 'Report PDF not found. Please re-generate.' });
+  }
+});
+
+app.get('/api/report/doc', (req, res) => {
+  const docPath = path.join(process.cwd(), 'public', 'SpoofSentry_Project_Report.doc');
+  if (fs.existsSync(docPath)) {
+    res.setHeader('Content-Type', 'application/msword');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.doc"');
+    fs.createReadStream(docPath).pipe(res);
+  } else {
+    const docContent = generateWordDocString();
+    res.setHeader('Content-Type', 'application/msword');
+    res.setHeader('Content-Disposition', 'attachment; filename="SpoofSentry_BTech_Mini_Project_Report.doc"');
+    res.send(docContent);
+  }
+});
+
 
 
 

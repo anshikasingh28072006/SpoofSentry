@@ -1,0 +1,531 @@
+
+  <!-- ==================== PAGE 1: TITLE & COVER PAGE ==================== -->
+  <div class="report-page" id="page-1">
+    <div style="text-align: center; font-weight: bold; font-size: 14pt; color: #111827; margin-top: 10px;">
+      ASHOKA INSTITUTE OF TECHNOLOGY AND MANAGEMENT
+    </div>
+    <div style="text-align: center; font-size: 11pt; color: #374151; margin-bottom: 12px;">
+      VARANASI, UTTAR PRADESH
+    </div>
+
+    <!-- Logos -->
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 480px; margin: 15px auto;">
+      <img src="data:image/png;base64,${aktuLogo}" alt="AKTU Seal" style="width: 100px; height: 100px; object-fit: contain;" />
+      <img src="data:image/png;base64,${ashokaLogo}" alt="Ashoka Seal" style="width: 130px; height: auto; object-fit: contain;" />
+    </div>
+
+    <h1 class="title" style="margin-top: 18px; line-height: 1.25;">
+      SPOOFSENTRY – EMAIL SPOOFING &<br>PHISHING FORENSIC DETECTOR
+    </h1>
+    <h2 class="subtitle" style="margin-top: 6px; margin-bottom: 14px;">(BCC351)</h2>
+
+    <div class="text-green-banner" style="margin-bottom: 16px;">
+      <div style="font-size: 11pt;">A Mini Project Report Submitted in Partial Fulfillment of Requirements</div>
+      <div style="font-size: 11pt;">For the Degree of</div>
+      <div style="font-weight: bold; font-size: 13pt; margin: 4px 0; color: #111827;">BACHELOR OF TECHNOLOGY</div>
+      <div style="font-size: 11pt;">In</div>
+      <div style="font-weight: bold; font-size: 12pt; margin: 2px 0; color: #111827;">COMPUTER SCIENCE AND ENGINEERING</div>
+    </div>
+
+    <!-- Submitted by and Supervision Box -->
+    <div style="border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 8px; padding: 14px 18px; max-width: 540px; margin: 10px auto; display: flex; justify-content: space-between; font-size: 10.5pt;">
+      <div style="text-align: left; width: 48%;">
+        <div style="font-weight: bold; color: #111827; margin-bottom: 6px; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px;">SUBMITTED BY:</div>
+        <div style="line-height: 1.6;">
+          <div><strong>1.</strong> <span style="color: #1d4ed8; font-weight: bold;">Anjali Shukla</span> (2506410100026)</div>
+          <div><strong>2.</strong> <span style="color: #1d4ed8; font-weight: bold;">Bhoomika Patel</span> (2506410100047)</div>
+          <div><strong>3.</strong> <span style="color: #1d4ed8; font-weight: bold;">Akanksha Maurya</span> (2506410100013)</div>
+          <div><strong>4.</strong> <span style="color: #1d4ed8; font-weight: bold;">Jigyasa Singh</span> (2506410100061)</div>
+          <div><strong>5.</strong> <span style="color: #1d4ed8; font-weight: bold;">Anshika Singh</span> (2506410100032)</div>
+        </div>
+      </div>
+      <div style="text-align: left; width: 48%; border-left: 1px solid #e2e8f0; padding-left: 14px;">
+        <div style="font-weight: bold; color: #111827; margin-bottom: 6px; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px;">Under the Supervision of:</div>
+        <div style="color: #059669; font-weight: bold; font-size: 12pt;">Er. Ankur Sir</div>
+        <div style="color: #4b5563; font-size: 9.5pt;">(Assistant Professor)</div>
+        <div style="color: #4b5563; font-size: 9.5pt;">Department of CSE-AIML</div>
+        <div style="color: #4b5563; font-size: 9.5pt;">Ashoka Institute of Tech. & Mgmt.</div>
+        <div style="color: #4b5563; font-size: 9.5pt;">Varanasi, Uttar Pradesh</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 18px; line-height: 1.4;">
+      <div style="font-weight: bold; font-size: 11pt; color: #111827;">DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING</div>
+      <div style="font-size: 10pt; color: #374151;">ASHOKA INSTITUTE OF TECHNOLOGY AND MANAGEMENT, VARANASI</div>
+      <div style="font-weight: bold; font-size: 10.5pt; color: #111827; margin-top: 3px;">(ACADEMIC SESSION: 2026-2027)</div>
+      <div style="font-size: 9pt; color: #64748b; margin-top: 6px;">Affiliated to Dr. APJ Abdul Kalam Technical University (AKTU), Lucknow</div>
+    </div>
+    <div class="page-number-top" style="margin-top: 18px;">-- 1 of 36 --</div>
+  </div>
+
+  <!-- ==================== PAGE 2: STUDENT DECLARATION ==================== -->
+  <div class="report-page page-break" id="page-2">
+    <div class="page-number-top">-- 2 of 36 --</div>
+    <h2 class="main-heading">STUDENT DECLARATION</h2>
+    
+    <p style="margin-top: 18px; line-height: 1.6; text-align: justify;">
+      We, <strong>Anjali Shukla</strong> (Roll No. 2506410100026), <strong>Bhoomika Patel</strong> (Roll No. 2506410100047), <strong>Akanksha Maurya</strong> (Roll No. 2506410100013), <strong>Jigyasa Singh</strong> (Roll No. 2506410100061), and <strong>Anshika Singh</strong> (Roll No. 2506410100032), students of Bachelor of Technology in Computer Science and Engineering at <strong>Ashoka Institute of Technology and Management, Varanasi</strong>, affiliated to <strong>Dr. APJ Abdul Kalam Technical University, Lucknow</strong>, hereby declare that the mini-project report entitled <strong>“SPOOFSENTRY – EMAIL SPOOFING & PHISHING FORENSIC DETECTOR (BCC351)”</strong> is a bonafide record of authentic work carried out by us under the supervision and guidance of <strong>Er. Ankur Sir</strong>, Assistant Professor, Department of Computer Science & Engineering - Artificial Intelligence and Machine Learning.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.6; text-align: justify;">
+      We further declare that the technical implementation, algorithmic designs, header parsing modules, DNS resolution pipelines, and investigative analysis presented in this report have been developed solely by our team. This work has not been submitted previously to this or any other academic university or examining body for the conferment of any degree, diploma, fellowship, or certificate.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.6; text-align: justify;">
+      We confirm that all open-source libraries, RFC specifications, research publications, and external references cited herein have been acknowledged with proper academic references as per university guidelines.
+    </p>
+
+    <div style="font-weight: bold; font-size: 11pt; margin-top: 24px; color: #111827;">CANDIDATE DETAILS AND SIGNATURES:</div>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 10pt;">
+      <thead>
+        <tr style="background-color: #dbeafe; color: #1e3a8a;">
+          <th style="border: 1px solid #94a3b8; padding: 7px; width: 10%;">S. No.</th>
+          <th style="border: 1px solid #94a3b8; padding: 7px; width: 28%;">Roll No.</th>
+          <th style="border: 1px solid #94a3b8; padding: 7px; width: 34%;">Student Name</th>
+          <th style="border: 1px solid #94a3b8; padding: 7px; width: 28%;">Signature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold;">1</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold;">2506410100026</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; color: #1d4ed8;">Anjali Shukla</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #94a3b8; font-style: italic;">[ Candidate Sign ]</td>
+        </tr>
+        <tr style="background-color: #f8fafc;">
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold;">2</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold;">2506410100047</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; color: #1d4ed8;">Bhoomika Patel</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #94a3b8; font-style: italic;">[ Candidate Sign ]</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold;">3</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold;">2506410100013</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; color: #1d4ed8;">Akanksha Maurya</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #94a3b8; font-style: italic;">[ Candidate Sign ]</td>
+        </tr>
+        <tr style="background-color: #f8fafc;">
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold;">4</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold;">2506410100061</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; color: #1d4ed8;">Jigyasa Singh</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #94a3b8; font-style: italic;">[ Candidate Sign ]</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold;">5</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold;">2506410100032</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; color: #1d4ed8;">Anshika Singh</td>
+          <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #94a3b8; font-style: italic;">[ Candidate Sign ]</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 36px; display: flex; justify-content: space-between; font-size: 10.5pt;">
+      <div>
+        <div><strong>Date:</strong> 03-11-2026</div>
+        <div><strong>Place:</strong> Varanasi, Uttar Pradesh</div>
+      </div>
+      <div style="text-align: right; color: #64748b; font-size: 9.5pt;">
+        Verified and recommended for submission towards<br>B.Tech Degree Examination (AKTU Lucknow).
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3: CERTIFICATE ==================== -->
+  <div class="report-page page-break" id="page-3">
+    <div class="page-number-top">-- 3 of 36 --</div>
+    <h2 class="main-heading">CERTIFICATE</h2>
+    
+    <p style="margin-top: 20px; line-height: 1.7; text-align: justify;">
+      This is to certify that the mini-project report entitled <strong>“SPOOFSENTRY – EMAIL SPOOFING & PHISHING FORENSIC DETECTOR (BCC351)”</strong> submitted by <strong>Anjali Shukla</strong> (2506410100026), <strong>Bhoomika Patel</strong> (2506410100047), <strong>Akanksha Maurya</strong> (2506410100013), <strong>Jigyasa Singh</strong> (2506410100061), and <strong>Anshika Singh</strong> (2506410100032) in partial fulfillment of the requirements for the award of the Degree of <strong>Bachelor of Technology in Computer Science and Engineering</strong> from <strong>Dr. APJ Abdul Kalam Technical University, Lucknow</strong>, is a record of bonafide academic work carried out under my personal guidance and supervision.
+    </p>
+
+    <p style="margin-top: 14px; line-height: 1.7; text-align: justify;">
+      To the best of my knowledge and belief, the analytical algorithms, source code implementations, security evaluations, and experimental data presented in this report have reached the prescribed academic standards and have not been submitted to any other university or institute for any examination, degree, or diploma.
+    </p>
+
+    <p style="margin-top: 14px; line-height: 1.7; text-align: justify;">
+      The project demonstrates advanced capabilities in RFC 5322 header tokenization, real-time DNS cryptographic policy validation (SPF RFC 7208, DKIM RFC 6376, DMARC RFC 7489), MTA hop transit latency calculations, and multimodal AI vision inspection for mobile email screenshots. The application successfully fulfills all objectives set forth for the mini-project curriculum.
+    </p>
+
+    <!-- Institutional Evaluation Criteria Box -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin: 24px 0; font-size: 9.5pt; line-height: 1.5;">
+      <div style="font-weight: bold; color: #1e293b; margin-bottom: 4px;">ACADEMIC EVALUATION RUBRIC CRITERIA & APPROVAL:</div>
+      <div>1. <strong>Implementation Rigor:</strong> Browser-native RFC 5322 tokenization, DNS resolvers, and zero-leak privacy.</div>
+      <div>2. <strong>Algorithmic Novelty:</strong> Dual-tier DNS resolution, Bayesian urgency scoring, and MTA hop latency analysis.</div>
+      <div>3. <strong>Practical Utility:</strong> Tested across corporate Gmail, Microsoft 365, Bank spoof vectors, and spoofed open relays.</div>
+      <div>4. <strong>Documentation Quality:</strong> Formatted 36-page report, flowcharts, tables, and test matrices adhering to AKTU norms.</div>
+    </div>
+
+    <!-- Signatures on Certificate -->
+    <div style="margin-top: 48px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 10.5pt; line-height: 1.4;">
+      <div style="width: 46%;">
+        <div style="border-top: 1px solid #111827; width: 190px; margin-bottom: 8px;"></div>
+        <div style="font-weight: bold; color: #111827;">Er. Ankur Sir</div>
+        <div style="color: #4b5563;">Project Coordinator & Assistant Professor</div>
+        <div style="color: #4b5563;">Department of CSE-AIML</div>
+        <div style="color: #4b5563;">Ashoka Institute of Tech. & Mgmt., Varanasi</div>
+      </div>
+
+      <div style="width: 46%; text-align: right;">
+        <div style="border-top: 1px solid #111827; width: 190px; margin-bottom: 8px; margin-left: auto;"></div>
+        <div style="font-weight: bold; color: #111827;">Dr. Anubhav Kr. Prasad</div>
+        <div style="color: #4b5563;">Associate Professor & Head of Department</div>
+        <div style="color: #4b5563;">Department of Computer Science & Engineering</div>
+        <div style="color: #4b5563;">Ashoka Institute of Tech. & Mgmt., Varanasi</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 45px; text-align: center;">
+      <div style="border-top: 1px solid #111827; width: 200px; margin: 0 auto 8px auto;"></div>
+      <div style="font-weight: bold; color: #111827;">EXTERNAL EXAMINER</div>
+      <div style="color: #64748b; font-size: 9.5pt;">Board of Technical Education / AKTU Lucknow</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 4: ACKNOWLEDGEMENT ==================== -->
+  <div class="report-page page-break" id="page-4">
+    <div class="page-number-top">-- 4 of 36 --</div>
+    <h2 class="main-heading">ACKNOWLEDGEMENT</h2>
+    
+    <div style="margin-top: 18px; font-weight: bold; color: #111827;">
+      On the submission of our Mini-Project report entitled:
+      <div style="color: #8b1d1d; font-size: 12pt; margin-top: 4px;">“SPOOFSENTRY – EMAIL SPOOFING & PHISHING FORENSIC DETECTOR (BCC351)”</div>
+    </div>
+
+    <p style="margin-top: 14px; line-height: 1.7; text-align: justify;">
+      We express our deepest and most sincere sense of gratitude to our respected Project Coordinator and Guide, <strong>Er. Ankur Sir</strong>, Assistant Professor, Department of Computer Science & Engineering - Artificial Intelligence and Machine Learning, for his invaluable technical guidance, keen scholarly supervision, continuous inspiration, and constructive critique throughout the conception, development, and testing phases of this project. His deep insights into network security architectures, email RFC standards, and forensic analysis methodologies were instrumental in resolving complex engineering bottlenecks.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      We extend our heartfelt gratitude to <strong>Dr. Sarika Shrivastava</strong>, Director, Ashoka Institute of Technology and Management, Varanasi, for cultivating an outstanding academic atmosphere, promoting student-led innovation, and providing world-class infrastructure and high-speed network laboratories necessary for carrying out this technical investigation.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      We are profoundly thankful to <strong>Dr. Anubhav Kr. Prasad</strong>, Associate Professor and Head of the Department of Computer Science and Engineering, for his steadfast support, departmental facilities, lab allocations, and encouragement during our project milestones.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      Our heartfelt thanks are also due to all the esteemed faculty members and dedicated technical staff of the Department of Computer Science and Engineering for their direct and indirect cooperation, insightful discussions, and technical assistance during the system integration and testing procedures.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      Most importantly, we express our boundless love, gratitude, and indebtedness to our beloved parents and family members for their unconditional sacrifices, moral strength, prayers, and patience throughout our educational journey. Their constant belief in our abilities has been our guiding light.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      Finally, we thank our group colleagues for their harmonious team spirit and dedication, and above all, we bow before Almighty God for bestowing upon us the intellect, wisdom, and health required to bring this project to a successful conclusion.
+    </p>
+
+    <div style="margin-top: 28px; text-align: right; line-height: 1.5; font-size: 10pt;">
+      <div style="font-weight: bold; color: #111827;">PROJECT ASSOCIATES:</div>
+      <div style="color: #4b5563;">Anjali Shukla (2506410100026)</div>
+      <div style="color: #4b5563;">Bhoomika Patel (2506410100047)</div>
+      <div style="color: #4b5563;">Akanksha Maurya (2506410100013)</div>
+      <div style="color: #4b5563;">Jigyasa Singh (2506410100061)</div>
+      <div style="color: #4b5563;">Anshika Singh (2506410100032)</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 5: ABSTRACT & KEYWORDS ==================== -->
+  <div class="report-page page-break" id="page-5">
+    <div class="page-number-top">-- 5 of 36 --</div>
+    <h2 class="main-heading">ABSTRACT</h2>
+    
+    <p style="margin-top: 16px; line-height: 1.7; text-align: justify;">
+      Email remains the foundational communication protocol of global commerce, academia, and enterprise infrastructure, transmitting upwards of 340 billion messages daily. However, the foundational protocol underpinning email transmission—the Simple Mail Transfer Protocol (SMTP, RFC 821/5321)—was designed in 1982 without built-in sender verification mechanisms. This architectural deficiency enables malicious adversaries to execute Email Spoofing, forging header fields to masquerade as trusted corporate executives, financial institutions, or university officials. According to the FBI Internet Crime Complaint Center (IC3), Business Email Compromise (BEC) and email spoofing account for over $2.9 billion in annual financial losses.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      Existing email security solutions, such as enterprise secure email gateways (SEGs), operate as costly, opaque black-boxes that quarantine messages without educating the recipient on why an email failed authentication. To bridge this critical usability and security divide, we have engineered SpoofSentry—an intelligent, browser-native, privacy-centric email spoofing and threat forensics web application. Built with React 19, TypeScript, and modern Web APIs, SpoofSentry provides transparent, explainable forensic evaluation without routing confidential internal emails through external third-party servers.
+    </p>
+
+    <p style="margin-top: 12px; line-height: 1.7; text-align: justify;">
+      SpoofSentry implements four multi-modal ingestion vectors: raw RFC 5322 header pasting, drag-and-drop .EML file parsing, mobile email screenshot OCR via Gemini Vision Multimodal AI, and direct Gmail OAuth inbox synchronization. The system parses folded headers, extracts Mail Transfer Agent (MTA) hops, queries authoritative DNS TXT records for SPF (RFC 7208), DKIM (RFC 6376), and DMARC (RFC 7489) policies, calculates hop transit latency anomalies, evaluates content urgency heuristics, and generates an explainable composite threat score (0-100) with actionable defense recommendations.
+    </p>
+
+    <!-- Report Organization Outline Box -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin: 20px 0; font-size: 9.5pt; line-height: 1.5;">
+      <div style="font-weight: bold; color: #1e293b; margin-bottom: 4px;">ORGANIZATION OF THE REPORT:</div>
+      <div>• <strong>PART 1 (Chapters 1 to 3):</strong> Formulates the threat model of email spoofing, underlying SMTP architecture, traditional inspection shortcomings, and the modern web stack: HTML5, Tailwind CSS, TypeScript, and React 19.</div>
+      <div>• <strong>PART 2 (Chapters 4 to 5):</strong> Detail the system architecture, component data models, multi-input intake pipeline, DNS TXT cryptographic verification, MTA route traversal, urgency heuristics, and experimental test suite.</div>
+      <div>• <strong>PART 3 (Chapter 6 & Appendices):</strong> Concludes with experimental accuracy benchmarks (98.6%), future scope, complete academic references, and full production source code listings for reproduction.</div>
+    </div>
+
+    <!-- Keywords Box -->
+    <div style="margin-top: 18px; font-size: 9.5pt; line-height: 1.6;">
+      <div style="font-weight: bold; color: #111827; margin-bottom: 2px;">KEYWORDS:</div>
+      <div>1. Email Spoofing Forensics &nbsp;&bull;&nbsp; 2. RFC 5322 Header Tokenization &nbsp;&bull;&nbsp; 3. SPF, DKIM & DMARC DNS Validation</div>
+      <div>4. Mail Transfer Agent (MTA) Route Latency &nbsp;&bull;&nbsp; 5. React 19 & TypeScript &nbsp;&bull;&nbsp; 6. Multimodal Vision AI OCR</div>
+      <div>7. Business Email Compromise (BEC) Mitigation &nbsp;&bull;&nbsp; 8. Zero-Leak Privacy Security Model</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 6: CONTENTS (PART 1 OF 2 - BALANCED 50/50 SPLIT!) ==================== -->
+  <div class="report-page page-break" id="page-6">
+    <div class="page-number-top">-- 6 of 36 --</div>
+    <h2 class="main-heading">CONTENTS</h2>
+    
+    <div style="margin-top: 18px;">
+      <div class="toc-row toc-bold">
+        <span class="toc-title">PRELIMINARY PAGES</span>
+        <span class="toc-page"></span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Title & Cover Page</span>
+        <span class="toc-page">1</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Student Declaration</span>
+        <span class="toc-page">2</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Faculty Certificate & Approval</span>
+        <span class="toc-page">3</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Acknowledgement</span>
+        <span class="toc-page">4</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Abstract & Keywords</span>
+        <span class="toc-page">5</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">1 INTRODUCTION TO EMAIL FORENSICS & SPOOFING DETECTION</span>
+        <span class="toc-page">8</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">1.1 What is email spoofing and why is it dangerous?</span>
+        <span class="toc-page">8</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">1.2 Traditional defense mechanisms and their limitations</span>
+        <span class="toc-page">9</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">1.3 Objectives and engineering motivation of the project</span>
+        <span class="toc-page">9</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">2 WEB & FORENSIC TECHNOLOGIES UTILIZED</span>
+        <span class="toc-page">10</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">2.1 Core technologies</span>
+        <span class="toc-page">10</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">2.1.1 HTML5 & Semantic Web Structures</span>
+        <span class="toc-page">10</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">2.1.2 CSS3 & Tailwind CSS Utility Framework</span>
+        <span class="toc-page">10</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">2.1.3 TypeScript & React 19 Modern Architecture</span>
+        <span class="toc-page">10</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">2.2 Forensic protocols, DoH and DNS resolution libraries</span>
+        <span class="toc-page">11</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">2.3 Browser security model & client-side threat caching</span>
+        <span class="toc-page">11</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">3 PROGRAMMING LANGUAGE JAVASCRIPT & TYPESCRIPT MECHANICS</span>
+        <span class="toc-page">11</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.1 Variables, constants and RFC 5322 header fields</span>
+        <span class="toc-page">12</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.2 Regular expressions and multi-line header unfolding</span>
+        <span class="toc-page">12</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.3 Cryptographic DNS lookup logic (SPF, DKIM, DMARC)</span>
+        <span class="toc-page">12</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.4 Array iteration methods for MTA Received hop traversal</span>
+        <span class="toc-page">12</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.5 The Document Object Model (DOM) and React Virtual DOM</span>
+        <span class="toc-page">13</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.6 Event handling, drag-and-drop and .EML file parsing</span>
+        <span class="toc-page">13</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.7 Local forensic history storage and JSON serialization</span>
+        <span class="toc-page">13</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">3.8 Date, timestamp and MTA transit delay calculations</span>
+        <span class="toc-page">14</span>
+      </div>
+    </div>
+
+    <!-- Visual Figure Summary Box on Page 6 (Fills page perfectly!) -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin-top: 24px; font-size: 9pt; line-height: 1.6;">
+      <div style="font-weight: bold; color: #1e293b; margin-bottom: 4px;">LIST OF FIGURES (PART 1):</div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 1: Architectural Workflow of the SpoofSentry Forensic Platform</span><span>Page 15</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 2: Forensic Dashboard of SpoofSentry in Ready / Awaiting State</span><span>Page 16</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 3: Forensic Dashboard Displaying Verified Legitimate Email Analysis</span><span>Page 17</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 4: Threat Breakdown of an Impersonated Banking Phishing Email</span><span>Page 18</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 5: Email Header Analyzer Workspace with Unfolded RFC 5322 Fields</span><span>Page 19</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 6: Drag-and-Drop .EML Ingestion Dialog and Parsing Interface</span><span>Page 20</span></div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 7: CONTENTS (PART 2 OF 2 - BALANCED 50/50 SPLIT!) ==================== -->
+  <div class="report-page page-break" id="page-7">
+    <div class="page-number-top">-- 7 of 36 --</div>
+    <h2 class="main-heading">CONTENTS (Continued)</h2>
+    
+    <div style="margin-top: 18px;">
+      <div class="toc-row toc-bold">
+        <span class="toc-title">4 SYSTEM ANALYSIS AND DESIGN</span>
+        <span class="toc-page">14</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">4.1 Requirement analysis (Functional & Non-Functional)</span>
+        <span class="toc-page">14</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">4.2 System architecture & forensic pipeline (Figure 1)</span>
+        <span class="toc-page">15</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">4.3 Forensic data model & TypeScript contracts</span>
+        <span class="toc-page">16</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">4.4 User interface design & cyber-defense color system</span>
+        <span class="toc-page">16</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">5 SPOOFSENTRY IMPLEMENTATION & SUBSYSTEMS</span>
+        <span class="toc-page">16</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.1 What is SpoofSentry?</span>
+        <span class="toc-page">16</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.2 Modular project structure & file organization</span>
+        <span class="toc-page">17</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.3 Real-time forensic dashboard</span>
+        <span class="toc-page">17</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.4 Raw header & .EML file analyzer</span>
+        <span class="toc-page">19</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.5 SPF, DKIM and DMARC authentication verifier</span>
+        <span class="toc-page">21</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.6 MTA route & hop timing analyzer</span>
+        <span class="toc-page">22</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.7 Screenshot OCR intake & Multimodal AI threat explainer</span>
+        <span class="toc-page">23</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.8 Implementation highlights</span>
+        <span class="toc-page">24</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">5.8.1 Header tokenization and RFC 5322 extraction</span>
+        <span class="toc-page">25</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">5.8.2 DNS record parsing and alignment validation</span>
+        <span class="toc-page">25</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">5.8.3 MTA hop transit delay & anomaly identification</span>
+        <span class="toc-page">25</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">5.8.4 Heuristic scoring formula & risk calculation</span>
+        <span class="toc-page">26</span>
+      </div>
+      <div class="toc-row" style="padding-left: 30px;">
+        <span class="toc-title">5.8.5 Threat notification and export facilities</span>
+        <span class="toc-page">26</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">5.9 Testing, experimental results & test matrix (Table 2)</span>
+        <span class="toc-page">27</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">6 CONCLUSION AND FUTURE SCOPE</span>
+        <span class="toc-page">28</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">6.1 Conclusion & achievement of project goals</span>
+        <span class="toc-page">28</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">6.2 Future scope & technical roadmap</span>
+        <span class="toc-page">28</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">REFERENCES & RFC SPECIFICATIONS</span>
+        <span class="toc-page">29</span>
+      </div>
+
+      <div class="toc-row toc-bold" style="margin-top: 10px;">
+        <span class="toc-title">APPENDICES</span>
+        <span class="toc-page">30</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Appendix 1. Core Header Parser Implementation (emailHeaderParser.ts)</span>
+        <span class="toc-page">30</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Appendix 2. Forensic Evaluation & DNS Engine Code (server.ts)</span>
+        <span class="toc-page">33</span>
+      </div>
+      <div class="toc-row" style="padding-left: 15px;">
+        <span class="toc-title">Appendix 3. Cyber Threat UI & Forensic Styling Code (Tailwind / CSS)</span>
+        <span class="toc-page">35</span>
+      </div>
+    </div>
+
+    <!-- Visual Figure Summary Box on Page 7 (Fills page perfectly!) -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin-top: 24px; font-size: 9pt; line-height: 1.6;">
+      <div style="font-weight: bold; color: #1e293b; margin-bottom: 4px;">LIST OF FIGURES (PART 2) & TABLES:</div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 7: Domain Authentication Status Tiles for SPF, DKIM, and DMARC</span><span>Page 21</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 8: Authoritative DNS TXT Security Records Query Inspector</span><span>Page 22</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 9: Chronological MTA Route Hop Path Reconstructed by SpoofSentry</span><span>Page 22</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 10: Inter-Hop Delay Graph Isolating Latency and Clock Drift Anomalies</span><span>Page 23</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 11: Multimodal AI Screenshot OCR Extraction & Threat Synthesis</span><span>Page 23</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Figure 12: Interactive Modal Dialog for Purging Local Forensic Audit Records</span><span>Page 24</span></div>
+      <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; margin-top: 4px; padding-top: 4px;"><span>Table 1.1: Comparison of Traditional Inspection vs. SpoofSentry Platform</span><span>Page 9</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Table 2.1: Technology Stack Components, Versions & Architectural Roles</span><span>Page 10</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Table 4.1: Requirement Traceability and Implementation Verification Matrix</span><span>Page 14</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Table 5.1: Risk Metric Scoring Thresholds, Verdicts & Recommended Actions</span><span>Page 18</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Table 5.2: Protocol Alignment Combination Matrix & Resulting Security Verdicts</span><span>Page 21</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Table 2: Comprehensive Forensic Test Suite Matrix (10 Scenarios)</span><span>Page 27</span></div>
+    </div>
+  </div>
+  

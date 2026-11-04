@@ -38,3 +38,71 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #c7bcac;
 }
+
+/* Global Print Styles for 36-Page Academic Mini Project Report */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 12mm 15mm;
+  }
+  
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide app navigation, intake panels, action bars and buttons */
+  header, nav, button, .print\\:hidden, .no-print, [role="tablist"], [role="navigation"] {
+    display: none !important;
+  }
+
+  /* Report Book Wrapper */
+  .report-book-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .report-content-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .report-page {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 18mm 20mm !important;
+    width: 100% !important;
+    min-height: 275mm !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .code-box {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  table.report-table th {
+    background-color: #d1e7dd !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+

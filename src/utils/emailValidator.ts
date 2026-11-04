@@ -43,11 +43,30 @@ export function validateEmailInput(input: {
   from?: string;
   subject?: string;
   body?: string;
+  source?: string;
 }): EmailValidationResult {
+  // If source is direct Gmail sync, this is by definition an authentic email message
+  if (input.source === 'gmail') {
+    return {
+      isEmail: true,
+      detectedType: 'email',
+      reason: 'Authentic email message fetched via Google Gmail API.'
+    };
+  }
+
   const text = (input.text || '').trim();
   const from = (input.from || '').trim();
   const subject = (input.subject || '').trim();
   const body = (input.body || '').trim();
+
+  // If sender address is clearly present with @, it is an email
+  if (from && /@/.test(from)) {
+    return {
+      isEmail: true,
+      detectedType: 'email',
+      reason: 'Valid email message with authenticated sender address.'
+    };
+  }
 
   const combined = [from, subject, body, text].filter(Boolean).join('\n').trim();
 

@@ -29,7 +29,8 @@ export async function getFirebaseApp() {
   let config: any = null;
   try {
     const res = await fetch('/api/config');
-    if (res.ok) {
+    const ct = res.headers.get('content-type') || '';
+    if (res.ok && ct.includes('application/json')) {
       const data = await res.json();
       config = data.firebaseConfig;
     }

@@ -36,6 +36,7 @@ import {
   GmailInboxResult,
   initAuthListener
 } from '../lib/firebaseAuth';
+import { AnalysisResponse } from '../types';
 import {
   INBOX_FILTER_PRESETS
 } from '../data/demoEmails';
@@ -56,13 +57,17 @@ interface GmailIntakeTabProps {
     };
   }) => Promise<void>;
   isAnalyzing: boolean;
+  analysisResult?: AnalysisResponse | null;
   onSwitchTab?: (tab: 'screenshot' | 'paste') => void;
+  onScrollToResult?: () => void;
 }
 
 export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
   onAnalyzeEmail,
   isAnalyzing,
-  onSwitchTab
+  analysisResult,
+  onSwitchTab,
+  onScrollToResult
 }) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string>('');
@@ -87,6 +92,8 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [popupNotice, setPopupNotice] = useState<boolean>(false);
   const [closedPopupNotice, setClosedPopupNotice] = useState<boolean>(false);
+  const [unauthorizedDomainNotice, setUnauthorizedDomainNotice] = useState<boolean>(false);
+  const [unauthorizedDomainName, setUnauthorizedDomainName] = useState<string>('');
   const [showHowTo, setShowHowTo] = useState<boolean>(false);
   const [showQueryTips, setShowQueryTips] = useState<boolean>(false);
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
@@ -200,6 +207,7 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
     setError(null);
     setPopupNotice(false);
     setClosedPopupNotice(false);
+    setUnauthorizedDomainNotice(false);
 
     try {
       const result = await signInWithGoogle();
@@ -225,6 +233,15 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
 
       if (isUserDismissal) {
         setClosedPopupNotice(true);
+        return;
+      }
+
+      if (
+        err?.code === 'auth/unauthorized-domain' ||
+        err?.message?.includes('unauthorized-domain')
+      ) {
+        setUnauthorizedDomainNotice(true);
+        setUnauthorizedDomainName(window.location.hostname || 'spoofsentry.vercel.app');
         return;
       }
 
@@ -355,6 +372,86 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
                   >
                     <Camera className="w-3.5 h-3.5 text-[#059669]" />
                     <span>Analyze via Screenshot (No Sign-In Needed)</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Unauthorized Domain (e.g. Vercel deployment) Helper */}
+      {unauthorizedDomainNotice && (
+        <div className="p-4 bg-rose-50 border border-rose-300 text-rose-950 rounded-xl space-y-3 shadow-xs">
+          <div className="flex items-start gap-2.5">
+            <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="space-y-2 text-xs flex-1">
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-slate-900 text-sm">
+                  Firebase Error: Unauthorized Domain ({unauthorizedDomainName || 'spoofsentry.vercel.app'})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setUnauthorizedDomainNotice(false)}
+                  className="text-stone-400 hover:text-stone-700 cursor-pointer p-0.5 rounded"
+                  title="Dismiss notice"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <p className="text-stone-700 leading-relaxed text-xs">
+                Firebase Authentication blocks logins from any new domain until you register it in your Firebase project. To enable Google Sign-In on <strong className="text-slate-900">{unauthorizedDomainName || 'spoofsentry.vercel.app'}</strong> in 1 minute:
+              </p>
+
+              <div className="bg-white/95 p-3 rounded-lg border border-rose-200 space-y-2 text-xs text-stone-800">
+                <div className="font-bold text-slate-900 flex items-center justify-between">
+                  <span>How to authorize this domain in Firebase Console:</span>
+                  <a
+                    href="https://console.firebase.google.com/project/gen-lang-client-0209555847/authentication/settings"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-[#059669] hover:text-[#047857] font-bold underline cursor-pointer"
+                  >
+                    Open Firebase Auth Settings ↗
+                  </a>
+                </div>
+                <ol className="list-decimal list-inside space-y-1 text-stone-700 text-[11px]">
+                  <li>
+                    Go to <a href="https://console.firebase.google.com/project/gen-lang-client-0209555847/authentication/settings" target="_blank" rel="noopener noreferrer" className="text-[#059669] underline font-bold">Firebase Console &gt; Authentication &gt; Settings</a>.
+                  </li>
+                  <li>Click the <strong>"Authorized domains"</strong> tab (under Sign-in method / Settings).</li>
+                  <li>Click <strong>"Add domain"</strong>.</li>
+                  <li>
+                    Enter <code className="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 font-mono font-semibold text-rose-700">{unauthorizedDomainName || 'spoofsentry.vercel.app'}</code> (and also <code className="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 font-mono text-stone-700">vercel.app</code>) and click <strong>Add</strong>.
+                  </li>
+                </ol>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleLiveGoogleSignIn}
+                  className="px-3.5 py-1.5 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Try Sign-In Again</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(unauthorizedDomainName || 'spoofsentry.vercel.app', 'domain')}
+                  className="px-3 py-1.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-800 font-bold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                  <span>{copiedField === 'domain' ? 'Copied Domain!' : 'Copy Domain Name'}</span>
+                </button>
+                {onSwitchTab && (
+                  <button
+                    type="button"
+                    onClick={() => onSwitchTab('screenshot')}
+                    className="px-3.5 py-1.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-800 font-bold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-[#059669]" />
+                    <span>Use Screenshot Intake (Zero Setup)</span>
                   </button>
                 )}
               </div>
@@ -890,6 +987,37 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
             </div>
           </div>
 
+          {/* TOP VERDICT BANNER (Shows when an email has been analyzed) */}
+          {analysisResult && (
+            <div className="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-300 rounded-xl flex flex-wrap items-center justify-between gap-2.5 shadow-2xs">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className={`w-3 h-3 rounded-full ${analysisResult.verdict === 'LEGITIMATE' ? 'bg-emerald-500' : analysisResult.verdict === 'SPOOFED' ? 'bg-rose-500' : 'bg-amber-500'} shrink-0 animate-pulse`} />
+                <div className="text-xs">
+                  <span className="font-bold text-slate-900">Analysis Complete: </span>
+                  <span className={`font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                    analysisResult.verdict === 'LEGITIMATE'
+                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                      : analysisResult.verdict === 'SPOOFED'
+                      ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                      : 'bg-amber-100 text-amber-800 border border-amber-300'
+                  }`}>
+                    {analysisResult.verdict}
+                  </span>
+                  <span className="text-slate-600 truncate ml-2 hidden sm:inline">
+                    ({analysisResult.sender_alignment.from_address})
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onScrollToResult}
+                className="px-3.5 py-1.5 bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+              >
+                <span>View Full Forensic Report ↓</span>
+              </button>
+            </div>
+          )}
+
           {/* Top Pagination Bar */}
           <div className="flex flex-col sm:flex-row items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs gap-2">
             <div className="flex items-center gap-2 flex-wrap">
@@ -968,39 +1096,82 @@ export const GmailIntakeTab: React.FC<GmailIntakeTabProps> = ({
               ) : (
                 liveMessages.map(msg => {
                   const isCurrent = analyzingMessageId === msg.id;
+                  const isAnalyzed = analysisResult?.gmail_metadata?.id === msg.id;
+                  const verdict = isAnalyzed ? analysisResult.verdict : null;
                   return (
                     <div
                       key={msg.id}
-                      className="p-3.5 bg-white border border-slate-200 hover:border-slate-300 rounded-xl transition-all shadow-xs hover:shadow-sm space-y-2"
+                      className={`p-3.5 bg-white border rounded-xl transition-all shadow-xs hover:shadow-sm space-y-2 ${
+                        isAnalyzed
+                          ? verdict === 'LEGITIMATE'
+                            ? 'border-emerald-400 ring-2 ring-emerald-200/60 bg-emerald-50/10'
+                            : verdict === 'SPOOFED'
+                            ? 'border-rose-400 ring-2 ring-rose-200/60 bg-rose-50/10'
+                            : 'border-amber-400 ring-2 ring-amber-200/60 bg-amber-50/10'
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="space-y-1 min-w-0 flex-1">
-                          <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                            {msg.subject}
-                          </h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                              {msg.subject}
+                            </h4>
+                            {isAnalyzed && (
+                              <span className={`shrink-0 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border ${
+                                verdict === 'LEGITIMATE'
+                                  ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                  : verdict === 'SPOOFED'
+                                  ? 'bg-rose-100 text-rose-800 border-rose-300'
+                                  : 'bg-amber-100 text-amber-800 border-amber-300'
+                              }`}>
+                                {verdict}
+                              </span>
+                            )}
+                          </div>
                           <div className="text-xs text-slate-600 truncate">
                             From: <span className="font-mono text-slate-800 font-semibold">{msg.from}</span>
                           </div>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={() => handleAnalyzeLiveMessage(msg)}
-                          disabled={isAnalyzing || isCurrent}
-                          className="shrink-0 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
-                        >
-                          {isCurrent ? (
-                            <>
-                              <RefreshCw className="w-3 h-3 animate-spin" />
-                              <span>Scanning...</span>
-                            </>
-                          ) : (
-                            <>
-                              <span>Analyze Verdict</span>
-                              <ArrowRight className="w-3 h-3" />
-                            </>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {isAnalyzed && onScrollToResult && (
+                            <button
+                              type="button"
+                              onClick={onScrollToResult}
+                              className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1 shadow-xs"
+                            >
+                              <span>View Verdict ↓</span>
+                            </button>
                           )}
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() => handleAnalyzeLiveMessage(msg)}
+                            disabled={isAnalyzing || isCurrent}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs ${
+                              isAnalyzed
+                                ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
+                                : 'bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white'
+                            }`}
+                          >
+                            {isCurrent ? (
+                              <>
+                                <RefreshCw className="w-3 h-3 animate-spin" />
+                                <span>Scanning...</span>
+                              </>
+                            ) : isAnalyzed ? (
+                              <>
+                                <span>Re-scan</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </>
+                            ) : (
+                              <>
+                                <span>Analyze Verdict</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
 
                       <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed bg-slate-50 p-2 rounded-lg border border-slate-100">

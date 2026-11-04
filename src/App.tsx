@@ -10,6 +10,7 @@ import { HistoryLogTable } from './components/HistoryLogTable';
 import { EmailLogo } from './components/EmailLogo';
 import { AnalysisResponse, HistoryItem } from './types';
 import { validateEmailInput } from './utils/emailValidator';
+import { evaluateEmail } from './utils/forensicsEngine';
 import {
   ShieldAlert,
   ShieldCheck,
@@ -38,12 +39,61 @@ export default function App() {
   const fetchHistory = async () => {
     try {
       const res = await fetch('/api/history');
-      if (res.ok) {
+      const ct = res.headers.get('content-type') || '';
+      if (res.ok && ct.includes('application/json')) {
         const data = await res.json();
-        setHistory(data.history || []);
+        if (Array.isArray(data.history) && data.history.length > 0) {
+          setHistory(data.history);
+          return;
+        }
       }
     } catch {
-      // silent fallback
+      // silent fallback to localStorage
+    }
+
+    try {
+      const saved = localStorage.getItem('spoofsentry_history');
+      if (saved) {
+        setHistory(JSON.parse(saved));
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const persistToHistory = (itemResult: AnalysisResponse) => {
+    const fromAddr = itemResult.sender_alignment.from_address || itemResult.sender_alignment.from_domain || 'Unknown Sender';
+    const subj = itemResult.content_analysis ? (itemResult as any).subject || itemResult.gmail_metadata?.snippet || '' : '';
+    
+    const record: HistoryItem = {
+      id: Date.now(),
+      userId: 1,
+      fromAddress: fromAddr,
+      subject: subj,
+      verdict: itemResult.verdict,
+      riskScore: itemResult.content_analysis.risk_score,
+      analyzedAt: itemResult.analyzed_at || new Date().toISOString(),
+      details: itemResult
+    };
+
+    try {
+      const existing = localStorage.getItem('spoofsentry_history');
+      const list = existing ? JSON.parse(existing) : [];
+      list.unshift(record);
+      localStorage.setItem('spoofsentry_history', JSON.stringify(list.slice(0, 30)));
+      setHistory(list.slice(0, 30));
+    } catch {
+      // ignore
+    }
+
+    try {
+      fetch('/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record)
+      }).catch(() => {});
+    } catch {
+      // ignore
     }
   };
 
@@ -79,27 +129,78 @@ export default function App() {
       return;
     }
 
-    try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-      });
+    // Clean sender email check
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+    let cleanFrom = params.from;
+    let cleanHeadersUnavailable = params.headersUnavailable;
+    if (!cleanFrom || !cleanFrom.trim() || !emailRegex.test(cleanFrom)) {
+      const emailInBody = params.body ? params.body.match(emailRegex) : null;
+      if (emailInBody) {
+        cleanFrom = emailInBody[0];
+        cleanHeadersUnavailable = true;
+      }
+    }
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to complete analysis.');
+    try {
+      let finalResult: AnalysisResponse | null = null;
+
+      // 1. First attempt: call the backend / serverless API endpoint
+      try {
+        const response = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...params,
+            from: cleanFrom,
+            headersUnavailable: cleanHeadersUnavailable
+          })
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+
+        if (response.ok && contentType.includes('application/json')) {
+          const result: AnalysisResponse = await response.json();
+          finalResult = {
+            ...result,
+            source: params.source,
+            headersUnavailable: cleanHeadersUnavailable,
+            gmail_metadata: params.gmail_metadata
+          };
+        } else if (!response.ok && contentType.includes('application/json')) {
+          const errData = await response.json();
+          if (errData.is_not_email) {
+            setError(`Cannot analyze: ${errData.error}`);
+            setIsAnalyzing(false);
+            return;
+          }
+        }
+      } catch (networkErr) {
+        console.warn('Backend API endpoint returned error or unreachable. Falling back to in-browser live DNS engine:', networkErr);
       }
 
-      const result: AnalysisResponse = await response.json();
-      setAnalysisResult({
-        ...result,
-        source: params.source,
-        headersUnavailable: params.headersUnavailable,
-        gmail_metadata: params.gmail_metadata
-      });
+      // 2. Dual-Engine Fallback: If backend was not reached or returned 404 HTML (Vercel static routing)
+      // run the live forensics engine client-side with Google DNS-over-HTTPS!
+      if (!finalResult) {
+        console.info('Invoking SpoofSentry client forensics engine via Google DNS-over-HTTPS...');
+        const localEvaluation = await evaluateEmail({
+          fromAddress: cleanFrom,
+          returnPath: params.return_path,
+          dkimHeader: params.dkim_header,
+          subject: params.subject,
+          body: params.body,
+          dateStr: params.date
+        });
 
-      fetchHistory();
+        finalResult = {
+          ...localEvaluation,
+          source: params.source,
+          headersUnavailable: Boolean(cleanHeadersUnavailable),
+          gmail_metadata: params.gmail_metadata
+        };
+      }
+
+      setAnalysisResult(finalResult);
+      persistToHistory(finalResult);
 
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
